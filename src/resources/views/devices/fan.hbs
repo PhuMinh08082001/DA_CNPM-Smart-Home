@@ -138,16 +138,12 @@
 		},
 	},
 });
-
-
-
 const fetchData =()=>{ 
     fetch('https://io.adafruit.com/api/v2/DAFS/feeds/fan/data')
   .then(response => response.json())
   .then(data => resData(data));
 }
 setInterval(fetchData,3000);
-
 var checkbox= document.querySelector(".checkbox");
   const resData =(data)=>{
       console.log(data[0])
@@ -157,7 +153,6 @@ var checkbox= document.querySelector(".checkbox");
   else{
       checkbox.checked = false;
   }
-
   }
   const turn =  document.querySelectorAll(".fan__devices__item__image");
 checkbox.addEventListener("change", () => {
@@ -176,7 +171,6 @@ checkbox.addEventListener("change", () => {
             postData(datas);
            
 })
-
 const postData =(datas)=>{
      fetch('https://io.adafruit.com/api/v2/DAFS/feeds/fan/data', {
             method: 'POST', // or 'PUT'
@@ -193,9 +187,5 @@ const postData =(datas)=>{
               console.error('Error:', error);
             });
 }
-
-
-
 </script>
 {{!-- <script src="./script5.js"></script> --}}
-

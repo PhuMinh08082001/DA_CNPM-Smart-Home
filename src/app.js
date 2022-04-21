@@ -15,7 +15,7 @@ var flash = require("connect-flash");
 var NotificationController = require("./app/controllers/notificationController");
 var report = require("./app/helpers/updateAverage");
 // check gas concentration frequently to notify
-var notificated = {val: false};
+var notificated = { val: false };
 NotificationController.checkGasConcen(notificated);
 
 // var indexRouter = require('./routes/index');
