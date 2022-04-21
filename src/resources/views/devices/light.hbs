@@ -8,33 +8,13 @@
     
 
     <div class="container">
+          <input id="aio_key"  type="hidden" value={{AIO_KEY}}>
         <div class="row">
             <div class="col-md-12 d-flex title">
                 <i class="fa fa-arrow-left col-5"></i>
                 <h1 class="col-2">Light</h1>
             </div>
-            {{!-- <div class="demo col-md-12">
-                <div class="navbar-collapse" id="navbar" style="align-items: center;">
-                    <ul id="autoWidth" class="cs-hidden">
-                        <li class="nav-item active item-a">
-                            <a class="nav-link " href="#">
-                                <img src="light.jpg" alt=""> Light 1
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item item-a">
-                            <a class="nav-link " href="#">
-                                <img src="light.jpg" alt=""> Light 2
-                            </a>
-                        </li>
-                        <li class="nav-item item-a">
-                            <a class="nav-link " href="#">
-                                <img src="light.jpg" alt=""> Light 3
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div> --}}
+           
             <div class="body">
                 <div class="img">
                     <div id="lightOff">
@@ -45,14 +25,7 @@
                     </div>
                 </div>
                 <div class="detail d-flex">
-                    {{!-- <div class="temp-air-condition" style="align-items: center;" >
-                        <span class="temp-setting">OFF</span>
-                        <label class="switch" >
-                            <input id="on-off" type="checkbox">
-                            <span id="on-off-span" class="slider round"></span>
-                        </label>
-                        <span class="temp-setting">ON</span>
-                    </div> --}}
+                   
                     <div class="temp-air-condition" style="align-items: center;">
                         <span class="temp-setting">Off</span>
                         <label class="switch">
@@ -206,7 +179,7 @@
             method: 'POST', // or 'PUT'
             headers: {
               'Content-Type': 'application/json',
-              'X-AIO-Key' : 'aio_Ytvf93pu8ObYmCSlN9OMJ9OeM2zH'
+              'X-AIO-Key' :  $('#aio_key').val()
             },
             body: JSON.stringify(data),
             })  

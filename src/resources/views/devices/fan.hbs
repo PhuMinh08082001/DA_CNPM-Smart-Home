@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
     <div class="fan">
-      
+       <input id="aio_key"  type="hidden" value={{AIO_KEY}}>
         <div class="swiper mySwiper fan__devices__wrapper ">
             <div class="swiper-wrapper fan__devices">
                 <div class="swiper-slide fan__devices__item">
@@ -71,39 +71,31 @@
             <p>25 °C</p>
         </div>
         <div class="fan__control">
-            <div class="fan__control__title">
-                <span>Mode</span>
-                <button type="button" class="btn btn-primary">Auto</button>
+            <div class="fan__control__item">
+                <span>off</span>
                 <label class="switch">
                 <input type="checkbox" class="checkbox">
                 <span class="slider round"></span>
               </label>
-             
+               <span>on</span>
             </div>
-            <div class="fan__control__item">
-                <strong>Time On</strong>
-                <div class="fan__control__item__input">
-                 <input type="number" value="10">
-                 <label for="">h</label>
+
+            <div class="fan__control__item__auto">
+                <div class="fan__control__item__auto__title">
+                    <p><span>Auto</span>
+                    <img src="/images/icons8-time-40.png" alt="">
+                    </p>
                 </div>
-                <div class="fan__control__item__input">
-                 <input type="number" value="10">
-                 <label for="">m</label>
+                <div class="fan__control__item__auto__btn">
+               <span>off</span>
+                <label class="switch">
+                <input type="checkbox" class="checkbox">
+                <span class="slider round"></span>
+              </label>
+               <span>on</span>
                 </div>
+            
             </div>
-            <div class="fan__control__item">
-                <strong>Time Off</strong>
-                <div class="fan__control__item__input">
-                 <input type="number" value="10">
-                 <label for="">h</label>
-                </div>
-                <div class="fan__control__item__input">
-                
-                 <input type="number" value="10">
-                 <label for="">m</label>
-                </div>
-            </div>
-           
         </div>
     </div>
 
@@ -138,29 +130,55 @@
 		},
 	},
 });
+
+const aio_key = document.querySelector("#aio_key").value;
+
+fetch("https://io.adafruit.com/api/v2/DAFS/feeds/temp/data")
+.then(res=>res.json())
+.then(data=>{
+   updateTemp(data);
+})
+
+
+const updateTemp = (data)=>{
+let temp = data[0].value;
+updateState(temp);
+    document.querySelector(".fan__content p").innerHTML =`${temp}%`;
+}
+const updateState =(temp)=>{
+if(Number(temp)>28){
+      checkboxs[1].click();
+}
+}
 const fetchData =()=>{ 
     fetch('https://io.adafruit.com/api/v2/DAFS/feeds/fan/data')
   .then(response => response.json())
   .then(data => resData(data));
 }
 setInterval(fetchData,3000);
+<<<<<<< HEAD
 var checkbox= document.querySelector(".checkbox");
+=======
+
+var checkboxs= document.querySelectorAll(".checkbox");
+>>>>>>> 14407b8a92b7eb395505616d57a4ad86192be297
   const resData =(data)=>{
-      console.log(data[0])
+       
+
   if (data[0].value==="1"){
-      checkbox.checked = true;
+      checkboxs[0].checked = true;
   }
   else{
-      checkbox.checked = false;
+      checkboxs[0].checked = false;
   }
   }
-  const turn =  document.querySelectorAll(".fan__devices__item__image");
-checkbox.addEventListener("change", () => {
+const turn =  document.querySelectorAll(".fan__devices__item__image");
+checkboxs[0].addEventListener("change", () => {
  turn[0].classList.toggle("active")
 })
-    checkbox.addEventListener("change",()=>{
+    checkboxs[0].addEventListener("change",()=>{
   
-    if (checkbox.checked){
+    if (checkboxs[0].checked){
      
         datas= {value:"1"}
     }
@@ -176,7 +194,7 @@ const postData =(datas)=>{
             method: 'POST', // or 'PUT'
             headers: {
               'Content-Type': 'application/json',
-              'X-AIO-Key' : 'aio_PkDW01Hbrr7r0N8NSjygTSyqdtf4'
+              'X-AIO-Key' : `${aio_key}`
             },
             body: JSON.stringify(datas),
             })
@@ -187,5 +205,74 @@ const postData =(datas)=>{
               console.error('Error:', error);
             });
 }
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+const fetchData1 =()=>{ 
+    fetch('https://io.adafruit.com/api/v2/DAFS/feeds/auto')
+  .then(response => response.json())
+  .then(data => resData1(data));
+}
+
+setInterval(fetchData1,3000);
+
+var checkboxs= document.querySelectorAll(".checkbox");
+
+  const resData1=(data)=>{
+   if (data.last_value==="5"){
+      checkboxs[1].checked = true;
+     checkboxs[0].checked = false;
+       checkboxs[0].disabled = true;
+      postData({value:"0"})
+  }
+  else{
+      checkboxs[1].checked = false;
+       checkboxs[0].disabled = false;
+  }
+
+
+  }
+
+   checkboxs[1].addEventListener("change",()=>{
+  
+    if (checkboxs[1].checked){
+     
+        datas= {value:"5"}
+
+     
+    }
+    else{
+       
+        datas= {value:"4"}
+    }
+            postData1(datas);
+           
+})
+const postData1 =(datas)=>{
+     fetch('https://io.adafruit.com/api/v2/DAFS/feeds/auto/data', {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+              'X-AIO-Key' : `${aio_key}`
+            },
+            body: JSON.stringify(datas),
+            })
+            .then(()=>{
+               setTimeout( fetchData,1000);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+}
+
+>>>>>>> 14407b8a92b7eb395505616d57a4ad86192be297
 </script>
 {{!-- <script src="./script5.js"></script> --}}

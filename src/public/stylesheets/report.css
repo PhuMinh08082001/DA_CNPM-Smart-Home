@@ -4,6 +4,7 @@
 }
 
 #chartContainer {
+    padding-top: 50px;
     position: relative;
     /* padding-right: 400px; */
     height: 300px;
@@ -12,7 +13,7 @@
 
 .avarage {
     position: absolute;
-    top: 30%;
+    top: 60%;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -21,4 +22,12 @@
     font-size: 30px;
     color: red;
     font-weight: bold;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    text-align: center;
+    margin: 0 auto;
 }

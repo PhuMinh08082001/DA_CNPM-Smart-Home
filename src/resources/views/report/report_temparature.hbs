@@ -1,6 +1,28 @@
    <link rel="stylesheet" href="/stylesheets/report.css">
  
 <div class="report_container">
+
+  <table style="width:80%">
+       <tr>
+           <td style="font-size:20px; font-weight: bold;" colspan="7">Bảng số liệu của nhiệt độ trong tuần</td>
+       </tr>
+  <tr>
+      <td>Monday</td>
+      <td>Tuesday</td>
+      <td>Wednesday</td>
+      <td>Thursday</td>
+      <td>Friday</td>
+      <td>Saturday</td>
+      <td>Sunday</td>
+  </tr>
+  <tr>
+        {{#each temp}}
+    <td class="col">{{this.temperature}}</td>
+    {{/each}}
+  </tr>
+ 
+</table>
+
      <div id="chartContainer" >
 
     </div>
@@ -11,7 +33,11 @@
 
 
     <script>
-        const data = [15, 17, 27, 15, 17, 22, 16];
+   const dataCol = document.querySelectorAll(".col")
+let data=[];
+dataCol.forEach((item, index) =>{
+data.push(Number(item.innerHTML));
+})
 
         window.onload = function() {
             const sum = data.reduce((a, b) => {
@@ -19,6 +45,7 @@
 
             }, 0)
             const avarage = (sum / (data.length)).toFixed(2);
+            localStorage.setItem('tempAvarage', JSON.stringify(avarage));
             document.querySelector(".avarage span").innerHTML = `${avarage} °C`;
 
             var dps = [];
@@ -43,32 +70,31 @@
 
                     dataPoints: [{
                         label: "Monday",
-                        y: 15,
+                        y: data[0],
 
                     }, {
                         label: "Tuesday",
-                        y: 17,
+                        y: data[1],
 
                     }, {
                         label: "Wednesday",
-                        y: 27,
+                        y: data[2],
 
                     }, {
                         label: "Thursday",
-                        y: 15,
+                        y:data[3],
 
                     }, {
                         label: "Friday",
-                        y: 17,
+                        y: data[4],
 
                     }, {
                         label: "Saturday",
-                        y: 22,
+                        y:data[5],
 
                     }, {
                         label: "Sunday",
-                        y: 16,
-
+                        y: data[6],
                     }]
                 }]
             });
