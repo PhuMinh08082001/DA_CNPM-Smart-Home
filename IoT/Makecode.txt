@@ -1,0 +1,121 @@
+// nhan du lieu tu dashboard
+serial.onDataReceived("#", function () {
+    message = serial.readUntil("#")
+    if (message == "0") {
+        pins.digitalWritePin(DigitalPin.P3, 0)
+    } else if (message == "1") {
+        pins.digitalWritePin(DigitalPin.P3, 1)
+        // NPNBitKit.Relay(DigitalPin.P3, true)
+    } else if (message == "2") {
+        pins.digitalWritePin(DigitalPin.P4, 0)
+    } else if (message == "3") {
+        pins.digitalWritePin(DigitalPin.P4, 1)
+    } else if (message == "4") {
+        auto = 0
+    } else if (message == "5") {
+        auto = 1
+    }
+})
+
+// ham hien thi nhiet do, do am len den led
+function DHT11 () {
+    counter_DHT11 += 1
+    if (counter_DHT11 >= 100) {
+        NPNBitKit.DHT11Read(DigitalPin.P0)
+        dht11_dht22.queryData(
+        DHTtype.DHT11,
+        DigitalPin.P0,
+        true,
+        false,
+        true
+        )
+        NPNLCD.ShowString("NHIET DO: " + ("" + NPNBitKit.DHT11Temp()), 0, 0)
+        NPNLCD.ShowString("DO AM: " + ("" + NPNBitKit.DHT11Hum()), 0, 1)
+        serial.writeString("!1:TEMP:" + ("" + NPNBitKit.DHT11Temp()) + "#")
+        // basic.pause(100)
+        serial.writeString("!1:HUMI:" + ("" + NPNBitKit.DHT11Hum()) + "#")
+        // basic.pause(100)
+        serial.writeString("!1:LIGHT:" + pins.digitalReadPin(DigitalPin.P2) + "#")
+        counter_DHT11 = 0
+    }
+}
+
+// dieu khien quat tu dong
+function AUTOMATIC_FAN () {
+    if (NPNBitKit.DHT11Temp() >= 28 && pins.digitalReadPin(DigitalPin.P2) == 1) {
+        pins.digitalWritePin(DigitalPin.P3, 1)
+        NPNBitKit.Relay(DigitalPin.P3, true)
+        serial.writeString("!1:FAN:1#")
+        serial.writeString("!1:INFRA:1#")
+    } else if (NPNBitKit.DHT11Temp() < 28 || pins.digitalReadPin(DigitalPin.P2) == 0) {
+        NPNBitKit.Relay(DigitalPin.P3, false)
+        pins.digitalWritePin(DigitalPin.P3, 0)
+        serial.writeString("!1:FAN:0#")
+        serial.writeString("!1:INFRA:0#")
+    } else {
+    	
+    }
+    basic.pause(5000)
+}
+
+// doc khi gas va chuong canh bao
+function GAS_SENSOR () {
+    counter_gas_sensor += 1
+    gas_raw = pins.analogReadPin(AnalogPin.P10);
+    if(gas_raw < 300) {
+    pins.digitalWritePin(DigitalPin.P5, 0);
+    }
+    if (counter_gas_sensor >= 150) {
+        counter_gas_sensor = 0
+        if (gas_raw >= 500) {
+            let counter_buzer = 10;
+            while (counter_buzer > 0) {
+            pins.digitalWritePin(DigitalPin.P5, 1);
+                basic.pause(100)
+                counter_buzer--;
+            }
+        } else {
+            pins.digitalWritePin(DigitalPin.P5, 0);
+        }
+        serial.writeString("!3:GAS:" + ("" + gas_raw) + "#")
+    }
+}
+
+// dieu khien den tu dong
+function AUTOMATIC_LED () {
+    // P2 CAM BIEN ANH SANG
+    // P1 CAM BIEN HONG NGOAI
+    if (pins.digitalReadPin(DigitalPin.P2) == 0 && pins.digitalReadPin(DigitalPin.P1) == 0) {
+        pins.digitalWritePin(DigitalPin.P4, 1)
+        serial.writeString("!1:LED:3#")
+    } else if (pins.digitalReadPin(DigitalPin.P2) == 1 || pins.digitalReadPin(DigitalPin.P1) == 1) {
+        pins.digitalWritePin(DigitalPin.P4, 0)
+        serial.writeString("!1:LED:2#")
+    } else {
+    	
+    }
+    basic.pause(5000)
+}
+let counter_gas_sensor = 0
+let message = ""
+let counter_DHT11 = 0
+let gas_raw = 0
+let auto = 0
+let counter = 0;
+
+NPNLCD.LcdInit(39)
+NPNLCD.BacklightOn()
+auto = 0
+gas_raw = 0
+led.enable(false)
+basic.forever(function () {
+    DHT11()
+    GAS_SENSOR()
+    if (auto == 1) {
+        DHT11()
+        GAS_SENSOR()
+        AUTOMATIC_FAN()
+        AUTOMATIC_LED()
+    }
+    basic.pause(100)
+})
