@@ -130,16 +130,12 @@
 		},
 	},
 });
-
 const aio_key = document.querySelector("#aio_key").value;
-
 fetch("https://io.adafruit.com/api/v2/DAFS/feeds/temp/data")
 .then(res=>res.json())
 .then(data=>{
    updateTemp(data);
 })
-
-
 const updateTemp = (data)=>{
 let temp = data[0].value;
 updateState(temp);
@@ -156,15 +152,9 @@ const fetchData =()=>{
   .then(data => resData(data));
 }
 setInterval(fetchData,3000);
-<<<<<<< HEAD
-var checkbox= document.querySelector(".checkbox");
-=======
-
 var checkboxs= document.querySelectorAll(".checkbox");
->>>>>>> 14407b8a92b7eb395505616d57a4ad86192be297
   const resData =(data)=>{
        
-
   if (data[0].value==="1"){
       checkboxs[0].checked = true;
   }
@@ -205,27 +195,13 @@ const postData =(datas)=>{
               console.error('Error:', error);
             });
 }
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
-
-
-
 const fetchData1 =()=>{ 
     fetch('https://io.adafruit.com/api/v2/DAFS/feeds/auto')
   .then(response => response.json())
   .then(data => resData1(data));
 }
-
 setInterval(fetchData1,3000);
-
 var checkboxs= document.querySelectorAll(".checkbox");
-
   const resData1=(data)=>{
    if (data.last_value==="5"){
       checkboxs[1].checked = true;
@@ -237,16 +213,12 @@ var checkboxs= document.querySelectorAll(".checkbox");
       checkboxs[1].checked = false;
        checkboxs[0].disabled = false;
   }
-
-
   }
-
    checkboxs[1].addEventListener("change",()=>{
   
     if (checkboxs[1].checked){
      
         datas= {value:"5"}
-
      
     }
     else{
@@ -272,7 +244,5 @@ const postData1 =(datas)=>{
               console.error('Error:', error);
             });
 }
-
->>>>>>> 14407b8a92b7eb395505616d57a4ad86192be297
 </script>
 {{!-- <script src="./script5.js"></script> --}}
