@@ -1,5 +1,5 @@
 const ReportController = require("../controllers/reportController");
-const DeviceController = require("../controllers/deviceController");
+const DeviceController = require("../controllers/DeviceController");
 require("dotenv").config();
 var fetch = require("node-fetch");
 
